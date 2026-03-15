@@ -1,0 +1,4 @@
+requests==2.31.0
+schedule==1.2.1
+python-arango==7.9.1
+pydantic==2.7.1
