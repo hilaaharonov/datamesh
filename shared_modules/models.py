@@ -1,6 +1,6 @@
-from pydantic import BaseModel, Field
 from datetime import datetime, timezone
-from typing import Any
+
+from pydantic import BaseModel, Field
 
 
 class DataProduct(BaseModel):
@@ -8,7 +8,7 @@ class DataProduct(BaseModel):
     Not stored in ArangoDB — used by the scheduler and collector."""
 
     name: str
-    url: str
+    get_products_url: str
     interval_seconds: int = 60
     collection: str
 
@@ -19,7 +19,6 @@ class DataProductDocument(BaseModel):
 
     product: str
     url: str
-    status_code: int
     data: dict | list
     collected_at: datetime = Field(
         default_factory=lambda: datetime.now(timezone.utc)
