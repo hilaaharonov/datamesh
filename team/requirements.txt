@@ -2,3 +2,4 @@ fastapi
 uvicorn
 python-arango
 pydantic
+shared_models @ file:///shared_modules

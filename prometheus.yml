@@ -1,0 +1,11 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: "arangodb"
+    static_configs:
+      - targets: ["host.docker.internal:8529"]
+    metrics_path: "/_admin/metrics/v2"
+    basic_auth:
+      username: "root"
+      password: "rootpassword"
