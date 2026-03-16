@@ -9,7 +9,7 @@ class DataProduct(BaseModel):
 
     name: str
     get_products_url: str
-    interval_seconds: int = 60
+    interval_seconds: int = 120
     collection: str
 
 
@@ -20,8 +20,8 @@ class DataProductDocument(BaseModel):
     product: str
     url: str
     data: dict | list
-    collected_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc)
+    collected_at: str = Field(
+        default_factory=lambda: datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     )
 
     def to_arango(self) -> dict:

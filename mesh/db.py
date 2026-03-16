@@ -28,6 +28,5 @@ def ensure_collections(db: StandardDatabase) -> None:
 
 
 def insert_document(db: StandardDatabase, collection: str, document: dict) -> dict:
-    """Insert a document and return the result including the generated _id."""
     result = db.collection(collection).insert(document, return_new=True)
     return result["new"]
