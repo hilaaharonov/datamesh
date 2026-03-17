@@ -7,10 +7,8 @@ log = logging.getLogger(__name__)
 
 
 def get_db() -> StandardDatabase:
-    """Connect to ArangoDB, creating the database if it doesn't exist."""
     client = ArangoClient(hosts=ARANGO_URL)
 
-    # Must connect to _system first to create a new database
     sys_db = client.db("_system", username=ARANGO_USER, password=ARANGO_PASSWORD)
     if not sys_db.has_database(ARANGO_DB):
         sys_db.create_database(ARANGO_DB)

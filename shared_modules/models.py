@@ -14,8 +14,10 @@ class DataProduct(BaseModel):
 
 
 class DataProductDocument(BaseModel):
-    """Envelope stored in ArangoDB for every collected record.
-    Domain data is stored as-is in `data` — no schema validation applied."""
+    """
+    Pydantic model for data product documents.
+    the actual data is not validated except for making share it's a JSON
+    """
 
     product: str
     url: str

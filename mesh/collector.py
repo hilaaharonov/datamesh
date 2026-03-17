@@ -19,7 +19,7 @@ def poll(db: StandardDatabase, product: DataProduct) -> None:
         log.info(f"Stored document from '{product.name}' → {inserted['_id']}")
 
     except ValidationError as e:
-        log.error(f"Envelope validation error from '{product.name}': {e}")
+        log.error(f"Data Product validation error from '{product.name}': {e}")
     except requests.exceptions.Timeout:
         log.error(f"Timeout polling '{product.name}'")
     except requests.exceptions.ConnectionError:
