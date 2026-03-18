@@ -2,7 +2,7 @@ import logging
 import requests
 from pydantic import ValidationError
 from arango.database import StandardDatabase
-from shared_modules.models import DataProduct, DataProductDocument
+from shared_models import DataProduct, DataProductDocument
 from db import insert_document
 
 log = logging.getLogger(__name__)

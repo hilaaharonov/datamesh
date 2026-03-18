@@ -3,7 +3,7 @@ from fastapi import FastAPI, HTTPException, Request
 from arango.database import StandardDatabase
 from db import get_db, COLLECTION_NAME
 from models import TeamMember, CreateTeamMemberRequest, UpdateTeamMemberRequest
-from shared_modules.models import DataProductDocument
+from shared_models import DataProductDocument
 
 logging.basicConfig(
     level=logging.INFO,
@@ -16,7 +16,7 @@ db: StandardDatabase = get_db()
 
 @app.post("/members", response_model=TeamMember, status_code=201)
 def create_member(request: CreateTeamMemberRequest) -> TeamMember:
-    member = TeamMember(name=request.name, role=request.role)
+    member = TeamMember(name=request.name, role=request.role, id=request.id)
     db.collection(COLLECTION_NAME).insert(member.to_arango())
     return member
 

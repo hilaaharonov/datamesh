@@ -1,10 +1,10 @@
-from pydantic import BaseModel, Field
-from uuid import uuid4
+from pydantic import BaseModel
+
 
 class TeamMember(BaseModel):
     """Represents a team member stored in ArangoDB."""
 
-    id: str = Field(default_factory=lambda: str(uuid4()))
+    id: str
     name: str
     role: str
 
@@ -23,6 +23,7 @@ class CreateTeamMemberRequest(BaseModel):
     """Request body for creating a new team member."""
     name: str
     role: str
+    id: str
 
 
 class UpdateTeamMemberRequest(BaseModel):
@@ -30,3 +31,4 @@ class UpdateTeamMemberRequest(BaseModel):
     All fields are optional — only provided fields are updated."""
     name: str | None = None
     role: str | None = None
+    id: str | None = None

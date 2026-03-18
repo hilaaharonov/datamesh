@@ -1,5 +1,5 @@
 import os
-from shared_modules.models import DataProduct
+from shared_models import DataProduct
 
 ARANGO_URL      = os.getenv("ARANGO_URL", "http://localhost:8529")
 ARANGO_USER     = os.getenv("ARANGO_USER", "root")

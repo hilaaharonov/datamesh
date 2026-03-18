@@ -2,6 +2,6 @@ requests
 schedule
 python-arango
 pydantic
-shared_models @ file:///shared_modules
+shared_models @ file:///shared_models
 
 

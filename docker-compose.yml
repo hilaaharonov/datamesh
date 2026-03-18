@@ -1,0 +1,106 @@
+services:
+
+  # ─────────────────────────────────────────
+  # ArangoDB
+  # ─────────────────────────────────────────
+  arangodb:
+    image: arangodb:3.11
+    container_name: arangodb
+    environment:
+      ARANGO_ROOT_PASSWORD: rootpassword
+    ports:
+      - "8529:8529"
+    volumes:
+      - arangodb_data:/var/lib/arangodb3
+    networks:
+      - datamesh
+    restart: unless-stopped
+
+  # ─────────────────────────────────────────
+  # Prometheus
+  # ─────────────────────────────────────────
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.enable-lifecycle"
+    networks:
+      - datamesh
+    depends_on:
+      - arangodb
+
+  # ─────────────────────────────────────────
+  # Jaeger
+  # ─────────────────────────────────────────
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger
+    environment:
+      COLLECTOR_OTLP_ENABLED: "true"
+    ports:
+      - "16686:16686"
+      - "4317:4317"
+      - "4318:4318"
+    networks:
+      - datamesh
+
+  # ─────────────────────────────────────────
+  # Team Service
+  # ─────────────────────────────────────────
+  team_service:
+    build:
+      context: .
+      dockerfile: team/Dockerfile
+    container_name: team_service
+    environment:
+      ARANGO_URL: http://arangodb:8529
+      ARANGO_USER: root
+      ARANGO_PASSWORD: rootpassword
+      ARANGO_DB: team_service
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./shared_models:/shared_models
+    networks:
+      - datamesh
+    depends_on:
+      - arangodb
+    restart: unless-stopped
+
+  # ─────────────────────────────────────────
+  # Mesh Collector
+  # ─────────────────────────────────────────
+  mesh:
+    build:
+      context: .
+      dockerfile: mesh/Dockerfile
+    container_name: mesh
+    environment:
+      ARANGO_URL: http://arangodb:8529
+      ARANGO_USER: root
+      ARANGO_PASSWORD: rootpassword
+      ARANGO_DB: data_mesh
+      TEAM_SERVICE_URL: http://team_service:8001/members
+    volumes:
+      - ./shared_models:/shared_models
+    networks:
+      - datamesh
+    depends_on:
+      - arangodb
+      - team_service
+    restart: unless-stopped
+
+volumes:
+  arangodb_data:
+  prometheus_data:
+
+networks:
+  datamesh:
+    driver: bridge
