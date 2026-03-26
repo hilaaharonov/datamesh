@@ -4,6 +4,7 @@ from arango.database import StandardDatabase
 from db import get_db, COLLECTION_NAME
 from models import TeamMember, CreateTeamMemberRequest, UpdateTeamMemberRequest
 from shared_models import DataProductDocument
+from fastapi.middleware.cors import CORSMiddleware
 
 logging.basicConfig(
     level=logging.INFO,
@@ -11,6 +12,15 @@ logging.basicConfig(
 )
 
 app = FastAPI(title="Team Service")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # For production, replace "*" with your frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 db: StandardDatabase = get_db()
 
 
