@@ -22,8 +22,8 @@ def poll(db: StandardDatabase, product: DataProduct) -> None:
         log.error(f"Data Product validation error from '{product.name}': {e}")
     except requests.exceptions.Timeout:
         log.error(f"Timeout polling '{product.name}'")
-    except requests.exceptions.ConnectionError:
-        log.error(f"Connection error polling '{product.name}'")
+    except requests.exceptions.ConnectionError as e :
+        log.error(f"Connection error polling '{product.name}': {e}")
     except requests.exceptions.HTTPError as e:
         log.error(f"HTTP error polling '{product.name}': {e}")
     except Exception as e:
