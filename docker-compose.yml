@@ -87,7 +87,7 @@ services:
       ARANGO_USER: root
       ARANGO_PASSWORD: rootpassword
       ARANGO_DB: data_mesh
-      TEAM_SERVICE_URL: http://team_service:8001/members
+      TEAM_SERVICE_URL: http://team_service:8001/data
     volumes:
       - ./shared_models:/shared_models
     networks:
