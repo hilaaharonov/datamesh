@@ -1,111 +1,85 @@
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
+/* 1. Global Reset & Background */
 body {
   margin: 0;
+  padding: 0;
+  font-family: 'Garamond', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #FFF5F7; /* Very light, soft pink background */
+  color: #4A1D24; /* Deep brownish-pink for better readability */
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+/* 2. Main App Container */
+.app-container {
+  width: 100%;
+  max-width: 500px;
+  padding: 40px 20px;
 }
 
+/* 3. Header Styling */
 h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
+  font-size: 5rem;
+  color: #FF85A1; /* Vibrant but soft pink */
+  margin-bottom: 8px;
+  letter-spacing: -1px;
+  font-family: Garamond;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+.timestamp {
+  color: #FBB1BD;
+  font-size: 0.85rem;
+  margin-bottom: 30px;
+  display: block;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+/* 4. The Member Card */
+.member-card {
+  background: white;
+  border: none;
+  padding: 20px;
+  margin-bottom: 16px;
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  /* Soft pink "glow" shadow instead of grey */
+  box-shadow: 0 4px 15px rgba(255, 133, 161, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.member-card:hover {
+  transform: translateY(-2px); /* Lifts slightly when you hover */
+}
+
+/* 5. Member Details */
+.member-name {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #4A1D24;
+  text-transform: capitalize;
+}
+
+.member-role {
+  background-color: #FFE3E8; /* Light pink pill */
+  color: #FF5C8A; /* Strong pink text */
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: Copperplate;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* 6. Loading State */
+.loading {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  color: #FF85A1;
+  font-weight: bold;
+  font-size: 1.2rem;
 }
