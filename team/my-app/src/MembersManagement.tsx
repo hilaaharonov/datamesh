@@ -28,19 +28,24 @@ function MembersManagement() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValues, setEditValues] = useState<{ name: string; role: string }>({ name: "", role: "" });
 
+
+  async function getAllMembers(): Promise<TeamDataResponse[]> {
+        const response = await fetch(`${API_BASE}/data`);
+        if (!response.ok) {
+          throw new Error(`Failed to load members: ${response.status}`);
+        }
+        const data: TeamDataResponse[] = await response.json();
+        console.log("Fetched team data:", data.data);
+        return data.data
+      }
+
   async function fetchMembers() {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetch(`${API_BASE}/data`);
-      if (!response.ok) {
-        throw new Error(`Failed to load members: ${response.status}`);
-      }
-
-      const body = (await response.json()) as TeamDataResponse;
-      setMembers(Array.isArray(body.data) ? body.data : []);
-    } catch (err) {
+      const members: Member[] = await getAllMembers()
+      setMembers(members ?? []);   } catch (err) {
       const message = err instanceof Error ? err.message : "Unknown error";
       setError(message);
     } finally {
@@ -58,6 +63,9 @@ function MembersManagement() {
     setError(null);
 
     try {
+        if (members.map(m => m.id === newMember.id)) {
+            throw new Error(`Member with ID ${newMember.id} already exists.`);
+        }
       const response = await fetch(`${API_BASE}/members`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
