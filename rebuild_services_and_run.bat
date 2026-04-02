@@ -6,3 +6,6 @@
  docker build -f .\mesh\Dockerfile -t datamesh-mesh:latest . --no-cache
 
  docker compose up
+
+ cd C:\Users\hilaa\datamesh\team\my-app
+ npm run dev

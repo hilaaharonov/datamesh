@@ -13,9 +13,17 @@ type TeamDataResponse = {
   collected_at: string;
 };
 
-
-
 const API_BASE = "http://localhost:8001";
+
+  async function getAllMembers(): Promise<Member[]> {
+        const response = await fetch(`${API_BASE}/data`);
+        if (!response.ok) {
+          throw new Error(`Failed to load members: ${response.status}`);
+        }
+        const data: TeamDataResponse[] = await response.json();
+        console.log("Fetched team data:", data.data);
+        return data.data
+      }
 
 function MembersManagement() {
   const [members, setMembers] = useState<Member[]>([]);
@@ -28,16 +36,6 @@ function MembersManagement() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValues, setEditValues] = useState<{ name: string; role: string }>({ name: "", role: "" });
 
-
-  async function getAllMembers(): Promise<TeamDataResponse[]> {
-        const response = await fetch(`${API_BASE}/data`);
-        if (!response.ok) {
-          throw new Error(`Failed to load members: ${response.status}`);
-        }
-        const data: TeamDataResponse[] = await response.json();
-        console.log("Fetched team data:", data.data);
-        return data.data
-      }
 
   async function fetchMembers() {
     setLoading(true);
