@@ -2,6 +2,8 @@ requests
 schedule
 python-arango
 pydantic
+fastapi
+uvicorn[standard]
 shared_models @ file:///shared_models
 
 
