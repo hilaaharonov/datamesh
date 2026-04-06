@@ -78,3 +78,18 @@ def configure_new_dataproduct(product: DataProduct) -> None:
         "collection": product.collection,
     })
     logging.info(f"Added new data product '{product.name}' to configuration collection")
+
+
+def delete_dataproduct(product_name: str) -> Result[None, str]:
+    """Delete a data product from the configuration collection in the db."""
+    db = _get_db()
+    if not db.has_collection(CONFIG_COLLECTION):
+        logging.warning(f"Configuration collection '{CONFIG_COLLECTION}' does not exist. Nothing to delete.")
+        return Failure(f"Configuration collection '{CONFIG_COLLECTION}' does not exist.")
+    db.aql.execute(f"""
+        FOR doc IN {CONFIG_COLLECTION}
+        FILTER doc.name == @name
+        REMOVE doc IN {CONFIG_COLLECTION}
+    """, bind_vars={"name": product_name})
+    logging.info(f"Deleted data product '{product_name}' from configuration collection")
+    return Success(None)

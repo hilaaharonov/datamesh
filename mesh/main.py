@@ -80,6 +80,27 @@ def health() -> dict:
     return {"status": "ok", "products": [product.name for product in products]}
 
 
+@app.delete("/products/{product_name}")
+def delete_product(product_name: str) -> dict:
+    products = _current_products()
+    product = next((p for p in products if p.name == product_name), None)
+    if product is None:
+        raise HTTPException(status_code=404, detail=f"Unknown product '{product_name}'")
+    delete_result = config.delete_dataproduct(product_name)
+
+    match delete_result:
+        case config.Failure(error):
+            log.error(f"Failed to delete data product '{product_name}': {error}")
+            raise HTTPException(status_code=500, detail=f"Failed to delete data product '{product_name}'")
+        case config.Success(_):
+            log.info(f"Deleted data product '{product_name}' from configuration collection")
+    with _scheduler_lock:
+        config.sync_data_products_from_db()
+        _schedule_products(config.DATA_PRODUCTS)
+    log.info(f"Deleted data product '{product_name}' and its collection '{product.collection}'")
+    return {"message": f"Data product '{product_name}' deleted successfully"}
+
+
 @app.post("/add_data_product")
 def add_data_product(product: DataProduct) -> dict:
     products = _current_products()
@@ -109,7 +130,7 @@ def get_products() -> list[dict]:
         {
             "name": product.name,
             "collection": product.collection,
-            "source_url": product.get_products_url,
+            "get_products_url": product.get_products_url,
             "interval_seconds": product.interval_seconds,
         }
         for product in products
