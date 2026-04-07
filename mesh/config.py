@@ -86,9 +86,12 @@ def delete_dataproduct(product_name: str) -> Result[None, str]:
     collection = f"{PRODUCT_COLLECTION_PREFIX}_{product_name}"
     try:
         db = _get_db()
+        db.aql.execute(f"""FOR doc IN {CONFIG_COLLECTION} FILTER doc.name == @name REMOVE doc IN {CONFIG_COLLECTION}""",
+                       bind_vars={"name": product_name})
         db.delete_collection(collection)
     except Exception as e:
         logging.error(f"Failed to delete collection '{collection}' for product '{product_name}': {e}")
         return Failure(f"Failed to delete collection for product '{product_name}': {e}")
     logging.info(f"Deleted data product '{product_name}' from configuration collection")
+    sync_data_products_from_db()
     return Success(None)
