@@ -13,6 +13,7 @@ TEAM_SERVICE_URL = os.getenv("TEAM_SERVICE_URL", "http://team_service:8001/data"
 CONFIG_COLLECTION = "config"
 DATA_PRODUCTS: List[DataProduct] = []
 CONFIG_TYPE = List[dict[str, str]]
+PRODUCT_COLLECTION_PREFIX = "product"
 
 
 def _get_db():
@@ -82,14 +83,12 @@ def configure_new_dataproduct(product: DataProduct) -> None:
 
 def delete_dataproduct(product_name: str) -> Result[None, str]:
     """Delete a data product from the configuration collection in the db."""
-    db = _get_db()
-    if not db.has_collection(CONFIG_COLLECTION):
-        logging.warning(f"Configuration collection '{CONFIG_COLLECTION}' does not exist. Nothing to delete.")
-        return Failure(f"Configuration collection '{CONFIG_COLLECTION}' does not exist.")
-    db.aql.execute(f"""
-        FOR doc IN {CONFIG_COLLECTION}
-        FILTER doc.name == @name
-        REMOVE doc IN {CONFIG_COLLECTION}
-    """, bind_vars={"name": product_name})
+    collection = f"{PRODUCT_COLLECTION_PREFIX}_{product_name}"
+    try:
+        db = _get_db()
+        db.delete_collection(collection)
+    except Exception as e:
+        logging.error(f"Failed to delete collection '{collection}' for product '{product_name}': {e}")
+        return Failure(f"Failed to delete collection for product '{product_name}': {e}")
     logging.info(f"Deleted data product '{product_name}' from configuration collection")
     return Success(None)
