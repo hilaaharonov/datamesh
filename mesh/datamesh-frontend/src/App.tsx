@@ -27,6 +27,16 @@ async function fetchAllDataProducts(): Promise<DataProduct[]> {
   return data;
 }
 
+async function fetchLastCollectionTime(productName: string): Promise<string> {
+  const response = await fetch(`${dataProductBaseUrl}/products/${productName}/last_product_time`);
+  if (!response.ok) {
+    throw new Error(`Failed to load last collection time for ${productName}: ${response.status}`);
+  }
+  const data = await response.json();
+  return data.last_product_time;
+}
+
+
 async function addDataProduct(product: DataProductForm): Promise<void> {
   const response = await fetch(`${dataProductBaseUrl}/add_data_product`, {
     method: "POST",
@@ -237,6 +247,7 @@ function App() {
                   <div className="member-id">#{product.name}</div>
                   <div className="member-name">{product.collection}</div>
                   <div className="member-role">Every {product.interval_seconds}s</div>
+                  <div className="member-role">last collection time: {product.last_collect_time} </div>
                   <p className="product-url">{product.get_products_url}</p>
                   <button
                     className="button button-danger"

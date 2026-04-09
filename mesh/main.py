@@ -137,8 +137,7 @@ def get_products() -> list[dict]:
     ]
 
 
-@app.get("/products/{product_name}/latest", response_model=DataProductDocument)
-def get_latest_product_document(product_name: str) -> DataProductDocument:
+def get_lateast_product(product_name: str) -> DataProductDocument:
     products = _current_products()
     product = next((p for p in products if p.name == product_name), None)
     if product is None:
@@ -158,3 +157,13 @@ def get_latest_product_document(product_name: str) -> DataProductDocument:
         raise HTTPException(status_code=404, detail=f"No documents found for '{product_name}'")
 
     return DataProductDocument(**latest)
+
+
+@app.get("/products/{product_name}/latest", response_model=DataProductDocument)
+def get_latest_product_document(product_name: str) -> DataProductDocument:
+    return get_lateast_product(product_name)
+
+
+@app.get("/products/{product_name}/last_product_time", response_model=list[str])
+def get_last_product_time(product_name: str) -> list[str]:
+    return [get_lateast_product(product_name).collected_at]

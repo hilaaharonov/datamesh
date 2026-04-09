@@ -87,7 +87,6 @@ services:
       ARANGO_USER: root
       ARANGO_PASSWORD: rootpassword
       ARANGO_DB: data_mesh
-      TEAM_SERVICE_URL: http://team_service:8001/data
     ports:
       - "8002:8002"
     volumes:
