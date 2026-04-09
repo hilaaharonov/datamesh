@@ -164,6 +164,6 @@ def get_latest_product_document(product_name: str) -> DataProductDocument:
     return get_lateast_product(product_name)
 
 
-@app.get("/products/{product_name}/last_product_time", response_model=list[str])
-def get_last_product_time(product_name: str) -> list[str]:
+@app.get("/products/{product_name}/last_collect_time", response_model=list[str])
+def get_last_collect_time(product_name: str) -> list[str]:
     return [get_lateast_product(product_name).collected_at]
